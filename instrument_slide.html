@@ -2,28 +2,29 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <title>Instrument Slider</title> <!-- Title of HTML document displayed in browser tag -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <!-- Bootstrap CSS -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Bootstrap JavaScript -->
 </head>
 
 <body>
 
-    <div class="container-fluid p-5">
-        <div class="row">
+    <div class="container-fluid p-5"> <!-- Bootstrap container class for page layout -->
+        <div class="row"> <!-- row and col for grid layout -->
             <div class="col-md-4 mx-auto">
-                <h3 class="text-center">Web Audio Instrument</h3>
+                <h3 class="text-center">Web Audio Slider Instrument</h3>
                 <hr>
                 <form>
-                    <div class="form-group">
+                    <div class="form-group"> <!-- Frequency slider -->
                         <label for="frequency">Frequency (Hz):</label>
                         <input type="range" min="82.41" max="987.77" value="440" class="form-control-range"
                             id="frequency" oninput="updateFrequency()">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group"> <!-- Waveform selecter -->
                         <label for="waveform">Waveform:</label>
                         <select class="form-control" id="waveform" onchange="updateWaveform()">
                             <option value="sine">Sine</option>
@@ -32,7 +33,7 @@
                             <option value="triangle">Triangle</option>
                         </select>
                     </div>
-                    <div class="form-group text-center">
+                    <div class="form-group text-center"> <!-- On/off status of instrument -->
                         <button type="button" class="btn btn-primary" id="toggleButton"
                             onclick="toggleSound()">On</button>
                     </div>
@@ -42,46 +43,42 @@
     </div>
 
     <script>
+        // Sets the oscillator and AudioContext
         let context = new (window.AudioContext || window.webkitAudioContext)();
         let oscillator = context.createOscillator();
         let gainNode = context.createGain();
-        let isPlaying = false;
+        let isPlaying = false; // To keep track of the status of instrument
 
+        // Default setting the instrument
         oscillator.connect(gainNode);
         gainNode.connect(context.destination);
         oscillator.type = "sine";
 
         function toggleSound() {
-            isPlaying = !isPlaying;
-           //document.getElementById("toggleButton").innerHTML += isPlaying;
-            if (isPlaying) {
-                //console.log("isplaying");
+            isPlaying = !isPlaying; // toggle state of instrument
+            if (isPlaying) { // must be recreated and updated or it runs into errors
                 oscillator = context.createOscillator();
                 updateWaveform();
                 updateFrequency();
                 oscillator.connect(context.destination);
                 oscillator.start();
                 gainNode.GainNode = 1;
-                //document.getElementById("toggleButton").innerHTML = "On";
-            } else {
-                //console.log("notplaying");
+            } else { // must stop and disconnect because runs into errors if not "reset" this way
                 oscillator.stop();
                 oscillator.disconnect();
                 oscillator = null;
                 gainNode.GainNode = 0;
-                //document.getElementById("toggleButton").innerHTML = "Off";
             }
 
-            document.getElementById("toggleButton").innerHTML = (isPlaying ? "Off" : "On");
+            document.getElementById("toggleButton").innerHTML = (isPlaying ? "Off" : "On"); // updates text of toggle button
         }
 
         function updateFrequency() {
-            let frequency = document.getElementById("frequency").value;
-            oscillator.frequency.value = frequency;
+            oscillator.frequency.value = document.getElementById("frequency").value; // get the frequency value from the slider input and sets it
         }
 
         function updateWaveform() {
-            oscillator.type = document.getElementById("waveform").value;
+            oscillator.type = document.getElementById("waveform").value; // get the waveform value and sets it
         }
     </script>
 
