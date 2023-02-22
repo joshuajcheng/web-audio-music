@@ -2,9 +2,9 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <title>Instrument Dropdown Menu v2</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta charset="UTF-8"> <!-- Sets character encoding for the HTML document -->
+    <title>Instrument Dropdown Menu v2</title> <!-- Title of HTML document displayed in browser tag -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!-- Imported Bootstrap CSS framework for styling -->
     <style>
         .container {
             display: flex;
@@ -26,9 +26,9 @@
 <body>
     <div class="container">
         <div class="control-box">
-            <div class="form-group">
+            <div class="form-group"> <!-- Contains a label and select element for note selection -->
                 <label for="note-select">Note:</label>
-                <select class="form-control" id="note-select">
+                <select class="form-control" id="note-select"> <!-- Options for note values E2 to B5 -->
                     <option value="82.41">E2</option>
                     <option value="87.31">F2</option>
                     <option value="92.50">G2</option>
@@ -58,11 +58,11 @@
 
                 </select>
             </div>
-            <div class="form-group form-check">
+            <div class="form-group form-check"> <!-- Contains a toggle switch and label for the On/Off status of the audio -->
                 <input type="checkbox" class="form-check-input" id="toggle">
                 <label class="form-check-label" id="toggle-label" for="toggle">Off</label>
             </div>
-            <div class="form-group">
+            <div class="form-group"> <!-- Dropdown for the different waveform options -->
                 <label for="waveform-select">Waveform:</label>
                 <select class="form-control" id="waveform-select">
                     <option value="sine">Sine</option>
@@ -75,35 +75,43 @@
     </div>
 
     <script>
+        // Create an audio context object using the AudioContext interface
         const context = new (window.AudioContext || window.webkitAudioContext)();
+        // Get the select element for choosing notes by its ID attribute
         const noteSelect = document.querySelector("#note-select");
+        // Get the checkbox element for toggling sound on and off by its ID attribute
         const toggle = document.querySelector("#toggle");
+        // Get the label element for displaying whether the sound is on or off by its ID attribute
         const toggleLabel = document.querySelector("#toggle-label");
+        // Get the select element for choosing the waveform shape by its ID attribute
         const waveformSelect = document.querySelector("#waveform-select");
         let oscillator = null;
 
+        // Event listener to the note select element that updates the freq. value when changed
         noteSelect.addEventListener("change", function (event) {
-            if (oscillator) {
+            if (oscillator) { // If oscillator already has been set
                 oscillator.frequency.value = event.target.value;
             }
         });
 
+        // Event listener to the toggle checkbox element that turns the oscillator on or off when checked or unchecked
         toggle.addEventListener("change", function (event) {
             if (event.target.checked) {
-                oscillator = context.createOscillator();
+                oscillator = context.createOscillator(); // must be recreated and updated or it runs into errors
                 oscillator.type = waveformSelect.value;
                 oscillator.frequency.value = noteSelect.value;
                 oscillator.connect(context.destination);
                 oscillator.start();
                 toggleLabel.textContent = "On";
             } else {
-                oscillator.stop();
+                oscillator.stop(); // must stop and disconnect because runs into errors if not "reset" this way
                 oscillator.disconnect();
                 oscillator = null;
                 toggleLabel.textContent = "Off";
             }
         });
 
+        // Event listener to the waveform select element that updates the oscillator's waveform shape when a new shape is selected
         waveformSelect.addEventListener("change", function (event) {
             if (oscillator) {
                 oscillator.type = event.target.value;
