@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+    <div class="container-fluid p-5">
+        <div class="row">
+            <div class="col-md-4 mx-auto">
+                <h3 class="text-center">Web Audio Instrument</h3>
+                <hr>
+                <form>
+                    <div class="form-group">
+                        <label for="frequency">Frequency (Hz):</label>
+                        <input type="range" min="82.41" max="987.77" value="440" class="form-control-range"
+                            id="frequency" oninput="updateFrequency()">
+                    </div>
+                    <div class="form-group">
+                        <label for="waveform">Waveform:</label>
+                        <select class="form-control" id="waveform" onchange="updateWaveform()">
+                            <option value="sine">Sine</option>
+                            <option value="square">Square</option>
+                            <option value="sawtooth">Sawtooth</option>
+                            <option value="triangle">Triangle</option>
+                        </select>
+                    </div>
+                    <div class="form-group text-center">
+                        <button type="button" class="btn btn-primary" id="toggleButton"
+                            onclick="toggleSound()">On</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let context = new (window.AudioContext || window.webkitAudioContext)();
+        let oscillator = context.createOscillator();
+        let gainNode = context.createGain();
+        let isPlaying = false;
+
+        oscillator.connect(gainNode);
+        gainNode.connect(context.destination);
+        oscillator.type = "sine";
+
+        function toggleSound() {
+            isPlaying = !isPlaying;
+           //document.getElementById("toggleButton").innerHTML += isPlaying;
+            if (isPlaying) {
+                //console.log("isplaying");
+                oscillator = context.createOscillator();
+                updateWaveform();
+                updateFrequency();
+                oscillator.connect(context.destination);
+                oscillator.start();
+                gainNode.GainNode = 1;
+                //document.getElementById("toggleButton").innerHTML = "On";
+            } else {
+                //console.log("notplaying");
+                oscillator.stop();
+                oscillator.disconnect();
+                oscillator = null;
+                gainNode.GainNode = 0;
+                //document.getElementById("toggleButton").innerHTML = "Off";
+            }
+
+            document.getElementById("toggleButton").innerHTML = (isPlaying ? "Off" : "On");
+        }
+
+        function updateFrequency() {
+            let frequency = document.getElementById("frequency").value;
+            oscillator.frequency.value = frequency;
+        }
+
+        function updateWaveform() {
+            oscillator.type = document.getElementById("waveform").value;
+        }
+    </script>
+
+</body>
+
+</html>
