@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Slider v2</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+</head>
+
+<body>
+    <div class="container my-5">
+        <h1>Slider v2</h1>
+        <div class="form-group">
+            <label for="note-slider">Note Frequency</label>
+            <input type="range" min="82.41" max="987.77" step="0.01" class="form-control-range" id="note-slider" />
+        </div>
+        <div class="form-group">
+            <label for="waveform-select">Waveform</label>
+            <select class="form-control" id="waveform-select">
+                <option value="sine">Sine</option>
+                <option value="square">Square</option>
+                <option value="sawtooth">Sawtooth</option>
+                <option value="triangle">Triangle</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" id="play-button">Play</button>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.6/Tone.js"></script>
+        <script>
+            const synth = new Tone.Synth().toDestination();
+            const noteSlider = document.getElementById("note-slider");
+            const waveformSelect = document.getElementById("waveform-select");
+            const playButton = document.getElementById("play-button");
+            let playing = false;
+            let currentNote = 82.41; // E2
+            let currentWaveform = "sine";
+
+            noteSlider.addEventListener("input", (event) => {
+                currentNote = parseFloat(event.target.value);
+                if (playing) {
+                    synth.frequency.rampTo(currentNote, 0.1);
+                } else {
+                    synth.frequency.value = currentNote;
+                }
+            });
+
+            waveformSelect.addEventListener("change", (event) => {
+                currentWaveform = event.target.value;
+                synth.oscillator.type = currentWaveform;
+            });
+
+            playButton.addEventListener("click", () => {
+                playing = !playing;
+                if (playing) {
+                    synth.triggerAttack(currentNote);
+                    playButton.textContent = "Stop";
+                } else {
+                    synth.triggerRelease();
+                    playButton.textContent = "Play";
+                }
+            });
+        </script>
+</body>
+
+</html>

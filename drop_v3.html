@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Dropdown v3</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+
+        .control-box {
+            background-color: rgb(142, 188, 223);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+            width: 400px;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1>Dropdown v3</h1>
+        <div class="control-box">
+            <div class="form-group">
+                <label for="note-select">Select Note</label>
+                <select class="form-control" id="note-select">
+                    <option>E2</option>
+                    <option>F2</option>
+                    <option>G2</option>
+                    <option>A2</option>
+                    <option>B2</option>
+                    <option>C3</option>
+                    <option>D3</option>
+                    <option>E3</option>
+                    <option>F3</option>
+                    <option>G3</option>
+                    <option>A3</option>
+                    <option>B3</option>
+                    <option>C4</option>
+                    <option>D4</option>
+                    <option>E4</option>
+                    <option>F4</option>
+                    <option>G4</option>
+                    <option>A4</option>
+                    <option>B4</option>
+                    <option>C5</option>
+                    <option>D5</option>
+                    <option>E5</option>
+                    <option>F5</option>
+                    <option>G5</option>
+                    <option>B5</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="waveform-select">Select Waveform</label>
+                <select class="form-control" id="waveform-select">
+                    <option value="sine">Sine</option>
+                    <option value="square">Square</option>
+                    <option value="sawtooth">Sawtooth</option>
+                    <option value="triangle">Triangle</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" id="play-btn">On</button>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.6/Tone.js"></script>
+    <script src="drop_v3.js"></script>
+</body>
+
+</html>
