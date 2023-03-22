@@ -1,11 +1,32 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Analog Synth</title>
-	<script src="https://unpkg.com/tone"></script>
-</head>
-<body>
-	<script>
+	<head>
+		<title>Analog Synth</title>
+		<script src="https://unpkg.com/tone"></script>
+		<style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+
+        .control-box {
+            background-color: rgb(142, 188, 223);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+            width: 400px;
+            padding: 20px;
+        }
+    </style>
+	</head>
+	<body>
+		<div class="container mt-5">
+			<h1>Analog Synth</h1>
+		</div>
+		<script>
 		// Create a new Tone.js context
 		Tone.start();
 
@@ -57,5 +78,5 @@
 			osc.stop();
 		});
 	</script>
-</body>
+	</body>
 </html>
