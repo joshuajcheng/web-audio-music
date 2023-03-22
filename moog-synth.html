@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Moog Synth Example</title>
+</head>
+
+<body>
+    <script src="https://unpkg.com/tone"></script>
+    <script>
+        // Initialize the audio context and the synth components
+        const context = new AudioContext();
+        const filter = context.createBiquadFilter();
+        filter.type = "lowpass";
+        filter.frequency.setValueAtTime(800, context.currentTime);
+        const osc1 = new OscillatorNode(context);
+        const osc2 = new OscillatorNode(context);
+        const osc3 = new OscillatorNode(context);
+        osc1.type = "sawtooth";
+        osc2.type = "square";
+        osc3.type = "triangle";
+        osc1.frequency.setValueAtTime(110, context.currentTime);
+        osc2.frequency.setValueAtTime(220, context.currentTime);
+        osc3.frequency.setValueAtTime(440, context.currentTime);
+
+        // Create a polyphonic synth using Tone.PolySynth
+        const polySynth = new Tone.PolySynth().toDestination();
+
+        // Set the synth's voice options
+        polySynth.set({
+            oscillator: {
+                type: "sawtooth",
+            },
+            envelope: {
+                attack: 0.1,
+                decay: 0.2,
+                sustain: 0.5,
+                release: 1,
+            },
+        });
+
+        // Map the key codes to note names in the C major scale
+        const noteMap = {
+            KeyA: "C4",
+            KeyS: "D4",
+            KeyD: "E4",
+            KeyF: "F4",
+            KeyG: "G4",
+            KeyH: "A4",
+            KeyJ: "B4",
+        };
+
+        // Add an event listener to the HTML document to trigger notes on keydown
+        document.addEventListener("keydown", (event) => {
+            // Check if the pressed key corresponds to a note in the C major scale
+            if (noteMap[event.code]) {
+                // Trigger the corresponding note on the polyphonic synth
+                polySynth.triggerAttack(noteMap[event.code]);
+            }
+        });
+
+        // Add a keyup event listener to the HTML document to release notes
+        document.addEventListener("keyup", (event) => {
+            // Check if the released key corresponds to a note in the C major scale
+            if (noteMap[event.code]) {
+                // Release the corresponding note on the polyphonic synth
+                polySynth.triggerRelease(noteMap[event.code]);
+            }
+        });
+
+        // Connect the oscillators to the filter
+        osc1.connect(filter);
+        osc2.connect(filter);
+        osc3.connect(filter);
+
+        // Connect the filter to the destination (speakers)
+        filter.connect(context.destination);
+
+        // Start the oscillators
+        osc1.start();
+        osc2.start();
+        osc3.start();
+
+        // Add an event listener to the HTML document to change the filter frequency
+        document.addEventListener("mousemove", (event) => {
+            filter.frequency.setValueAtTime(event.clientY, context.currentTime);
+        });
+
+    </script>
+</body>
+
+</html>

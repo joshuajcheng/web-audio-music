@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Analog Synth</title>
+	<script src="https://unpkg.com/tone"></script>
+</head>
+<body>
+	<script>
+		// Create a new Tone.js context
+		Tone.start();
+
+		// Create an oscillator with a soft sine wave
+		const osc = new Tone.Oscillator({
+		  frequency: "C4",
+		  type: "sine",
+		  volume: -12,
+		});
+
+		// Create a reverb effect
+		const reverb = new Tone.Reverb({
+		  decay: 2,
+		  wet: 0.5,
+		});
+
+		// Connect the oscillator to the reverb and the reverb to the output
+		osc.chain(reverb, Tone.Destination);
+
+		// Start the oscillator and reverb
+		osc.start();
+		reverb.generate();
+
+		// Add a keydown event listener to the HTML document
+		document.addEventListener("keydown", (event) => {
+			// Check if the pressed key corresponds to a note in the C major scale
+			if (event.code === "KeyA") {
+				osc.frequency.value = "C4";
+			} else if (event.code === "KeyS") {
+				osc.frequency.value = "D4";
+			} else if (event.code === "KeyD") {
+				osc.frequency.value = "E4";
+			} else if (event.code === "KeyF") {
+				osc.frequency.value = "F4";
+			} else if (event.code === "KeyG") {
+				osc.frequency.value = "G4";
+			} else if (event.code === "KeyH") {
+				osc.frequency.value = "A4";
+			} else if (event.code === "KeyJ") {
+				osc.frequency.value = "B4";
+			}
+			// Trigger the oscillator to start playing the selected frequency
+			osc.start();
+		});
+
+		// Add a keyup event listener to the HTML document
+		document.addEventListener("keyup", () => {
+			// Stop the oscillator from playing the current frequency
+			osc.stop();
+		});
+	</script>
+</body>
+</html>

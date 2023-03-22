@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Rhodes Synth Example</title>
+</head>
+
+<body>
+    <script src="https://unpkg.com/tone"></script>
+    <script>
+        // Initialize the audio context and the synth components
+        const context = new AudioContext();
+
+        // Create a stereo panner node for the output
+        const panner = new StereoPannerNode(context);
+
+        // Create a lowpass filter for the output
+        const filter = context.createBiquadFilter();
+        filter.type = "lowpass";
+        filter.frequency.setValueAtTime(1000, context.currentTime);
+        filter.Q.setValueAtTime(10, context.currentTime);
+
+        // Create the polyphonic synth using Tone.PolySynth
+        const polySynth = new Tone.PolySynth().toDestination();
+
+        // Set the synth's voice options
+        polySynth.set({
+            oscillator: {
+                type: "sine",
+            },
+            envelope: {
+                attack: 0.05,
+                decay: 0.1,
+                sustain: 0.7,
+                release: 0.5,
+            },
+        });
+
+        // Map the computer keyboard to notes in the C major scale
+        const noteMap = {
+            KeyA: "C4",
+            KeyS: "D4",
+            KeyD: "E4",
+            KeyF: "F4",
+            KeyG: "G4",
+            KeyH: "A4",
+            KeyJ: "B4",
+        };
+
+        // Add an event listener to the HTML document to trigger notes on keydown
+        document.addEventListener("keydown", (event) => {
+            // Check if the pressed key corresponds to a note in the C major scale
+            if (
+                event.code === "KeyA" ||
+                event.code === "KeyS" ||
+                event.code === "KeyD" ||
+                event.code === "KeyF" ||
+                event.code === "KeyG" ||
+                event.code === "KeyH" ||
+                event.code === "KeyJ"
+            ) {
+                // Trigger the corresponding note on the polyphonic synth
+                const note = noteMap[event.code];
+                polySynth.triggerAttack(note);
+                // Pan the note left or right depending on the key pressed
+                if (event.code === "KeyA" || event.code === "KeyS" || event.code === "KeyD") {
+                    panner.pan.setValueAtTime(-0.8, context.currentTime);
+                } else if (event.code === "KeyF" || event.code === "KeyG" || event.code === "KeyH") {
+                    panner.pan.setValueAtTime(0.8, context.currentTime);
+                }
+            }
+        });
+
+        // Add a keyup event listener to the HTML document to release notes
+        document.addEventListener("keyup", (event) => {
+            // Check if the released key corresponds to a note in the C major scale
+            if (
+                event.code === "KeyA" ||
+                event.code === "KeyS" ||
+                event.code === "KeyD" ||
+                event.code === "KeyF" ||
+                event.code === "KeyG" ||
+                event.code === "KeyH" ||
+                event.code === "KeyJ"
+            ) {
+                // Release the corresponding note on the polyphonic synth
+                const note = noteMap[event.code];
+                polySynth.triggerRelease(note);
+            }
+        });
+
+        // Connect the polyphonic synth to
+        // Connect the polyphonic synth to the panner and start the audio context
+        polySynth.connect(panner);
+        context.resume();
+    </script>
+</body>
+</html>

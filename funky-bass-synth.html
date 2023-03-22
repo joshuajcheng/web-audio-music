@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Moog Sub Phatty Synth Example</title>
+</head>
+
+<body>
+    <script src="https://unpkg.com/tone"></script>
+    <script>
+        // Initialize the audio context and the synth components
+        const context = new AudioContext();
+
+        // Create a stereo panner node for the output
+        const panner = new StereoPannerNode(context);
+
+        // Create a lowpass filter for the output
+        const filter = context.createBiquadFilter();
+        filter.type = "lowpass";
+        filter.frequency.setValueAtTime(1000, context.currentTime);
+        filter.Q.setValueAtTime(10, context.currentTime);
+
+        // Create the monophonic synth using Tone.MonoSynth
+        const monoSynth = new Tone.MonoSynth({
+            oscillator: {
+                type: "triangle",
+            },
+            filter: {
+                type: "lowpass",
+                rolloff: -24,
+                Q: 3,
+            },
+            envelope: {
+                attack: 0.01,
+                decay: 0.1,
+                sustain: 0.5,
+                release: 1,
+            },
+            volume: -10,
+        }).toDestination();
+
+        // Map the computer keyboard to notes in the C# minor pentatonic scale
+        const keyMap = {
+            "z": "C#2",
+            "x": "D#2",
+            "c": "F#2",
+            "v": "G#2",
+            "b": "C#3",
+            "n": "D#3",
+            "m": "F#3",
+            ",": "G#3",
+            ".": "C#4",
+            "/": "D#4",
+        };
+
+        // Add an event listener to the HTML document to trigger notes on keydown
+        document.addEventListener("keydown", (event) => {
+            // Check if the pressed key corresponds to a note in the key map
+            if (keyMap[event.key]) {
+                // Trigger the corresponding note on the monophonic synth
+                const note = keyMap[event.key];
+                monoSynth.triggerAttack(note);
+                // Pan the note left or right depending on the key pressed
+                if (event.key === "z" || event.key === "x" || event.key === "c" || event.key === "v") {
+                    panner.pan.setValueAtTime(-0.8, context.currentTime);
+                } else if (event.key === "b" || event.key === "n" || event.key === "m" || event.key === "," || event.key === "." || event.key === "/") {
+                    panner.pan.setValueAtTime(0.8, context.currentTime);
+                }
+            }
+        });
+
+        // Add a keyup event listener to the HTML document to release notes
+        document.addEventListener("keyup", (event) => {
+            // Check if the released key corresponds to a note in the key map
+            if (keyMap[event.key]) {
+                // Release the corresponding note on the monophonic synth
+                const note = keyMap[event.key];
+                monoSynth.triggerRelease(note);
+            }
+        });
+
+        // Connect the monophonic synth to the panner and start the audio context
+        monoSynth.connect(panner);
+        context.resume();
+    </script>
+</body>
+
+</html>
