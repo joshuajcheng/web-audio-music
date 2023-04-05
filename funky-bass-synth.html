@@ -1,14 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
-<head>
-    <meta charset="UTF-8" />
-    <title>Moog Sub Phatty Synth Example</title>
-</head>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Moog Sub Phatty Synth Example</title>
+        <style>
+            .container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-top: 50px;
+            }
+    
+            .control-box {
+                background-color: rgb(142, 188, 223);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-top: 50px;
+                width: 400px;
+                padding: 20px;
+            }
+        </style>
+    </head>
 
-<body>
-    <script src="https://unpkg.com/tone"></script>
-    <script>
+    <body>
+        <div class="container mt-5">
+            <h1>Funky Bass</h1>
+        </div>
+        <script src="https://unpkg.com/tone"></script>
+        <script>
         // Initialize the audio context and the synth components
         const context = new AudioContext();
 
@@ -84,6 +105,6 @@
         monoSynth.connect(panner);
         context.resume();
     </script>
-</body>
+    </body>
 
 </html>
