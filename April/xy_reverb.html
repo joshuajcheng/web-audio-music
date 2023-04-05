@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebAudio API with Tone.js and Bootstrap CSS</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #instrument {
+            width: 400px;
+            height: 400px;
+            background-color: lightgray;
+            position: relative;
+            cursor: pointer;
+        }
+
+        #instrument:hover {
+            background-color: lightblue;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col text-center">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="sine">
+                    <label class="form-check-label" for="sine">Sine</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="square">
+                    <label class="form-check-label" for="square">Square</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="sawtooth">
+                    <label class="form-check-label" for="sawtooth">Sawtooth</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="triangle">
+                    <label class="form-check-label" for="triangle">Triangle</label>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col text-center">
+                <div id="instrument"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.30/Tone.js"></script>
+    <script src="xy_reverb.js"></script>
+</body>
+</html>
