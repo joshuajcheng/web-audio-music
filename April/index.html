@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PolySynth Demo</title>
+</head>
+<body>
+  <button id="playNote">Play Note</button>
+  <button id="stopNote">Stop Note</button>
+
+  <script src="Sound.js"></script>
+  <script src="PolySynth.js"></script>
+  <script>
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const polySynth = new PolySynth(audioContext);
+
+    document.getElementById("playNote").addEventListener("click", () => {
+      // Play a note with a frequency of 440 Hz (A4)
+      polySynth.noteOn(440);
+    });
+
+    document.getElementById("stopNote").addEventListener("click", () => {
+      polySynth.noteOff();
+    });
+  </script>
+</body>
+</html>

@@ -33,7 +33,7 @@ function handleMouseEvent(event) {
     const pitch = Tone.Frequency((y / rect.height) * 127, 'midi');
     const reverbAmount = (x / rect.width);
 
-    updateSynth(reverbAmount);
+    //updateSynth(reverbAmount);
 
     if (currentNote !== pitch) {
         if (currentNote !== null) {
@@ -45,10 +45,11 @@ function handleMouseEvent(event) {
     }
 }
 
-
+// specific to reverb -- not doing pitch
 function updateSynth(reverbAmount) {
     const waveformTypes = [];
 
+    // move checkbox/gui ui stuff out of this, to abstract it
     checkboxes.forEach((checkbox) => {
         if (checkbox.checked) {
             waveformTypes.push(checkbox.id);

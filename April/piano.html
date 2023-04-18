@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>PolySynth Piano</title>
+        <style>
+    #piano {
+      display: flex;
+      align-items: flex-start;
+      background-color: #eee;
+      padding: 1rem;
+    }
+    .white-key, .black-key {
+      user-select: none;
+    }
+    .white-key {
+      background-color: white;
+      border: 1px solid #bbb;
+      height: 100px;
+      width: 30px;
+      margin: 1px;
+    }
+    .black-key {
+      background-color: black;
+      height: 60px;
+      width: 20px;
+      position: relative;
+      margin: 1px;
+      left: -10px;
+      z-index: 1;
+    }
+  </style>
+    </head>
+    <body>
+        <div id="piano"></div>
+
+        <script src="Sound.js"></script>
+        <script src="PolySynth.js"></script>
+        <script>
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const polySynth = new PolySynth(audioContext);
+
+    const keyLayout = [
+      { note: "A", freq: 27.5, type: "white-key" },
+      { note: "A#", freq: 29.14, type: "black-key" },
+      { note: "B", freq: 30.87, type: "white-key" },
+      { note: "C", freq: 32.7, type: "white-key" },
+      { note: "C#", freq: 34.65, type: "black-key" },
+      { note: "D", freq: 36.71, type: "white-key" },
+      { note: "D#", freq: 38.89, type: "black-key" },
+      { note: "E", freq: 41.2, type: "white-key" },
+      { note: "F", freq: 43.65, type: "white-key" },
+      { note: "F#", freq: 46.25, type: "black-key" },
+      { note: "G", freq: 49, type: "white-key" },
+      { note: "G#", freq: 51.91, type: "black-key" },
+    ];
+
+    const piano = document.getElementById("piano");
+
+    for (let octave = 0; octave < 5; octave++) {
+      keyLayout.forEach(({ note, freq, type }) => {
+        const key = document.createElement("div");
+        key.className = type;
+        key.dataset.frequency = freq * Math.pow(2, octave);
+        key.dataset.note = `${note}${octave + 1}`;
+        key.addEventListener("mousedown", handleNoteOn);
+        key.addEventListener("mouseup", handleNoteOff);
+        piano.appendChild(key);
+      });
+    }
+
+    function handleNoteOn(event) {
+      const frequency = parseFloat(event.target.dataset.frequency);
+      polySynth.noteOn(frequency);
+    }
+
+    function handleNoteOff(event) {
+      polySynth.noteOff();
+    }
+
+        // Keyboard interaction
+        const keyMapping = {
+      'a': 'C3', 'w': 'C#3', 's': 'D3', 'e': 'D#3', 'd': 'E3', 'f': 'F3', 't': 'F#3', 'g': 'G3', 'y': 'G#3', 'h': 'A3', 'u': 'A#3', 'j': 'B3',
+      'k': 'C4', 'o': 'C#4', 'l': 'D4', 'p': 'D#4', ';': 'E4', '\'': 'F4', ']': 'F#4', '\\': 'G4', '=': 'G#4', '0': 'A4', '[': 'A#4', '1': 'B4',
+      '2': 'C5', '9': 'C#5', '3': 'D5', '8': 'D#5', '4': 'E5', '5': 'F5', '7': 'F#5', '6': 'G5', '-': 'G#5', '`': 'A5', 'z': 'A#5', 'x': 'B5',
+      'c': 'C6', 'v': 'C#6', 'b': 'D6', 'n': 'D#6', 'm': 'E6', ',': 'F6', '.': 'F#6', '/': 'G6', 'q': 'G#6', 'r': 'A6', 't': 'A#6', 'y': 'B6',
+    };
+
+    document.addEventListener('keydown', (event) => {
+      const key = event.key.toLowerCase();
+      const note = keyMapping[key];
+      if (note) {
+        const keyElement = document.querySelector(`[data-note="${note}"]`);
+        keyElement.classList.add('active');
+        handleNoteOn({ target: keyElement });
+      }
+    });
+
+    document.addEventListener('keyup', (event) => {
+      const key = event.key.toLowerCase();
+      const note = keyMapping[key];
+      if (note) {
+        const keyElement = document.querySelector(`[data-note="${note}"]`);
+        keyElement.classList.remove('active');
+        handleNoteOff({ target: keyElement });
+      }
+    });
+  </script>
+    </body>
+</html>
